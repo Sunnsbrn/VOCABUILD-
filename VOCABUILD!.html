@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOCABUILD – Premium English Vocabulary Builder</title>
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --bg-color: #ffffff;
+            --navy: #13294B;
+            --red: #E53935;
+            --red-alpha: rgba(229, 57, 53, 0.1);
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 2px 4px rgba(19, 41, 75, 0.05);
+            --shadow-md: 0 10px 25px rgba(19, 41, 75, 0.08);
+            --shadow-lg: 0 20px 40px rgba(19, 41, 75, 0.12);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg-color);
+        }
+
+        body {
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- REUSABLE UTILITIES --- */
+        section {
+            padding: 100px 5% ;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px auto;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--navy);
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .section-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background-color: var(--navy);
+            color: white;
+            border: 2px solid var(--navy);
+        }
+
+        .btn-primary:hover {
+            background-color: #0d1d36;
+            border-color: #0d1d36;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--navy);
+            border: 2px solid var(--navy);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--navy);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            padding: 10px 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* LOGO VERSI 2 INTERAKTIF (HIDDEN TEXT) */
+        .logo-v2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--navy);
+            text-decoration: none;
+            letter-spacing: 1px;
+            position: relative;
+            padding: 4px 8px;
+            display: inline-block;
+            user-select: none;
+        }
+
+        .logo-mika-filter {
+            position: absolute;
+            right: 6px;
+            top: 8px;
+            width: 53%;
+            height: 75%;
+            background-color: rgba(229, 57, 53, 0.85);
+            border-left: 2px solid #b71c1c;
+            border-radius: 4px;
+            box-shadow: -2px 0 8px rgba(229, 57, 53, 0.2);
+            mix-blend-mode: multiply;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: none;
+        }
+
+        .logo-v2:hover .logo-mika-filter {
+            transform: translateX(115%) rotate(4deg);
+            background-color: rgba(229, 57, 53, 0.95);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--navy);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--red);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--navy);
+            cursor: pointer;
+        }
+
+        /* --- HERO / ABOUT PRODUCT --- */
+        #about {
+            padding-top: 160px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-image-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .main-mockup {
+            width: 85%;
+            max-width: 480px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            background: linear-gradient(135deg, var(--navy) 0%, #1e3a64 100%);
+            aspect-ratio: 3/4;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-mockup::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40%;
+            height: 100%;
+            background: rgba(225, 57, 53, 0.4);
+            backdrop-filter: blur(2px);
+            border-left: 2px solid var(--red);
+            z-index: 2;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(0);
+        }
+
+        .about-image-wrapper:hover .main-mockup::before {
+            transform: translateX(30px);
+        }
+
+        .mockup-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .mockup-content {
+            z-index: 1;
+            margin-bottom: 40px;
+        }
+
+        .mockup-tag {
+            background: var(--red);
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .about-badge {
+            display: inline-block;
+            background-color: var(--red-alpha);
+            color: var(--red);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .about-content h1 {
+            font-size: 3.5rem;
+            color: var(--navy);
+            line-height: 1.15;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .about-content p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .product-meta-tags {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .meta-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--bg-light);
+            padding: 10px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--navy);
+            border: 1px solid var(--border-color);
+        }
+
+        .meta-tag i {
+            color: var(--red);
+        }
+
+        .about-actions {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* --- LEARNING METHOD --- */
+        #method {
+            background-color: var(--bg-light);
+            border-radius: var(--radius-lg);
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .method-card {
+            background-color: var(--bg-color);
+            padding: 40px 30px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .method-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--navy);
+        }
+
+        .method-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: rgba(19, 41, 75, 0.04);
+            line-height: 1;
+            transition: var(--transition);
+        }
+
+        .method-card:hover .method-number {
+            color: rgba(229, 57, 53, 0.08);
+        }
+
+        .method-icon-box {
+            width: 60px;
+            height: 60px;
+            background-color: var(--bg-light);
+            color: var(--navy);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            transition: var(--transition);
+        }
+
+        .method-card:hover .method-icon-box {
+            background-color: var(--navy);
+            color: white;
+        }
+
+        .method-card h3 {
+            font-size: 1.25rem;
+            color: var(--navy);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .method-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* --- HOW IT WORKS (MIKA SHEET STEPS) --- */
+        .mika-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 60px;
+            align-items: center;
+            background-color: var(--navy);
+            color: white;
+            border-radius: var(--radius-lg);
+            padding: 80px 5%;
+            overflow: hidden;
+        }
+
+        .mika-showcase .section-header h2 {
+            color: white;
+        }
+
+        .mika-showcase .section-header p {
+            color: #94a3b8;
+        }
+
+        .mika-interactive-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .step-progress-bar {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .step-progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #1e3a64;
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: var(--red);
+            z-index: 1;
+            transform: translateY(-50%);
+            transition: var(--transition);
+        }
+
+        .step-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #1e3a64;
+            border: 3px solid var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            z-index: 2;
+            cursor: pointer;
+            transition: var(--transition);
+            color: #94a3b8;
+        }
+
+        .step-node.active {
+            background: var(--red);
+            color: white;
+            border-color: white;
+            box-shadow: 0 0 15px var(--red);
+        }
+
+        .step-card-display {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 40px;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .step-card-display h3 {
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .step-card-display h3 span {
+            color: var(--red);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(229, 57, 53, 0.15);
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        .step-card-display p {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+        }
+
+        /* Interactive Sheet Visualizer */
+        .mika-visualizer {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            height: 400px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            color: var(--text-dark);
+        }
+
+        .visualizer-book-header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: var(--navy);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .visualizer-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 10px;
+            border-bottom: 1px solid var(--bg-light);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .word-col {
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        .definition-col {
+            color: var(--red);
+            position: relative;
+            width: 45%;
+            text-align: right;
+            transition: var(--transition);
+        }
+
+        /* The Animated Red Sheet overlay */
+        .mika-sheet-overlay {
+            position: absolute;
+            top: 65px;
+            right: 20px;
+            width: 50%;
+            height: calc(100% - 90px);
+            background: rgba(229, 57, 53, 0.85);
+            border-left: 3px solid #b71c1c;
+            box-shadow: -5px 0 25px rgba(229, 57, 53, 0.3);
+            border-radius: 4px;
+            z-index: 5;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mika-sheet-overlay::after {
+            content: 'RED MIKA SHEET';
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transform: rotate(90deg);
+            white-space: nowrap;
+        }
+
+        /* State updates driven by JS slider */
+        .mika-visualizer.step-1 .mika-sheet-overlay { transform: translateX(0); width: 50%; }
+        .mika-visualizer.step-1 .definition-col { opacity: 0; }
+
+        .mika-visualizer.step-2 .mika-sheet-overlay { transform: translateX(0); width: 50%; }
+        .mika-visualizer.step-2 .definition-col { opacity: 0; }
+
+        .mika-visualizer.step-3 .mika-sheet-overlay { transform: translateX(0); width: 50%; }
+        .mika-visualizer.step-3 .definition-col { opacity: 0; }
+
+        .mika-visualizer.step-4 .mika-sheet-overlay { transform: translateX(110%); }
+        .mika-visualizer.step-4 .definition-col { opacity: 1; color: #059669; }
+
+        .mika-visualizer.step-5 .mika-sheet-overlay { transform: translateX(0); width: 50%; animation: pulse 2s infinite; }
+        .mika-visualizer.step-5 .definition-col { opacity: 0; }
+
+        @keyframes pulse {
+            0% { opacity: 0.85; }
+            50% { opacity: 0.7; }
+            100% { opacity: 0.85; }
+        }
+
+        /* --- BOOK PREVIEW (SLIDER) --- */
+        .slider-wrapper {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .preview-slider {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 500px;
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            padding: 40px;
+        }
+
+        .slide-content-mock {
+            width: 100%;
+            height: 100%;
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            background: var(--bg-light);
+        }
+
+        .slide-content-mock i {
+            font-size: 3.5rem;
+            color: var(--navy);
+            margin-bottom: 20px;
+        }
+
+        .slide-content-mock h3 {
+            font-size: 1.6rem;
+            color: var(--navy);
+            margin-bottom: 15px;
+        }
+
+        .slide-content-mock p {
+            color: var(--text-light);
+            max-width: 500px;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--navy);
+            font-size: 1.2rem;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .slider-btn:hover {
+            background: var(--navy);
+            color: white;
+        }
+
+        .slider-btn-prev { left: 20px; }
+        .slider-btn-next { right: 20px; }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dot.active {
+            background: var(--navy);
+            width: 25px;
+            border-radius: 50px;
+        }
+
+        /* --- WHY THIS BOOK WORKS (BENEFITS) --- */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .benefit-card {
+            display: flex;
+            gap: 20px;
+            padding: 30px;
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .benefit-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: rgba(19, 41, 75, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .benefit-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--red-alpha);
+            color: var(--red);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .benefit-info h3 {
+            font-size: 1.2rem;
+            color: var(--navy);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .benefit-info p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* --- PRODUCT SPECIFICATIONS --- */
+        #specs {
+            background-color: var(--bg-light);
+            border-radius: var(--radius-lg);
+            margin-top: 40px;
+        }
+
+        .specs-container {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .spec-card {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .spec-card label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .spec-card p {
+            font-size: 1.1rem;
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        .qr-showcase-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 40px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qr-mockup {
+            width: 140px;
+            height: 140px;
+            background: var(--bg-light);
+            border: 4px solid var(--navy);
+            border-radius: var(--radius-sm);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .qr-mockup i {
+            font-size: 5rem;
+            color: var(--navy);
+        }
+
+        .qr-mockup::after {
+            content: 'SCAN ME';
+            position: absolute;
+            bottom: -10px;
+            background: var(--red);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 50px;
+            letter-spacing: 1px;
+        }
+
+        .qr-showcase-card h3 {
+            font-size: 1.3rem;
+            color: var(--navy);
+            margin-bottom: 10px;
+        }
+
+        .qr-showcase-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* --- TESTIMONIALS --- */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 35px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '“';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 5rem;
+            color: rgba(19, 41, 75, 0.05);
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-img-mock {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--navy);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .profile-info h4 {
+            font-size: 1rem;
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        .profile-info span {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            display: block;
+        }
+
+        /* --- FAQ (ACCORDION) --- */
+        .faq-max-width {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: var(--radius-sm);
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-trigger {
+            width: 100%;
+            padding: 22px 30px;
+            background: none;
+            border: none;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--navy);
+            cursor: pointer;
+        }
+
+        .faq-icon-state {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--bg-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--navy);
+            transition: var(--transition);
+            font-size: 0.8rem;
+        }
+
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--bg-light);
+        }
+
+        .faq-content p {
+            padding: 25px 30px;
+            color: var(--text-light);
+            font-size: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .faq-item.active {
+            border-color: var(--navy);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .faq-item.active .faq-icon-state {
+            background: var(--navy);
+            color: white;
+            transform: rotate(180deg);
+        }
+
+        /* --- CONTACT --- */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 60px;
+            background: white;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            padding: 60px;
+        }
+
+        .contact-info-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .contact-info-panel h3 {
+            font-size: 2rem;
+            color: var(--navy);
+            margin-bottom: 15px;
+        }
+
+        .contact-info-panel p {
+            color: var(--text-light);
+            margin-bottom: 40px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-light);
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .social-icon:hover {
+            background: var(--navy);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            background: var(--bg-light);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--navy);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(19, 41, 75, 0.05);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--navy);
+            color: #94a3b8;
+            padding: 40px 5% ;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+
+        /* --- RESPONSIVE BREAKPOINTS --- */
+        @media (max-width: 992px) {
+            #about, .specs-container, .contact-container, .mika-showcase {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .contact-container { padding: 40px; }
+            .about-content h1 { font-size: 2.8rem; }
+            .mika-visualizer { height: 350px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: white;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 40px;
+                transition: var(--transition);
+                box-shadow: var(--shadow-md);
+            }
+            .nav-menu.active { left: 0; }
+            .menu-toggle { display: block; }
+            .section-header h2 { font-size: 2rem; }
+            .specs-grid { grid-template-columns: 1fr; }
+            .about-actions { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION BAR -->
+    <header id="header">
+        <div class="nav-container">
+            <!-- LOGO INTERAKTIF VERSI 2 BERHASIL DITAMBAHKAN -->
+            <a href="#" class="logo-v2">
+                VOCABUILD
+                <div class="logo-mika-filter"></div>
+            </a>
+            <div class="menu-toggle" id="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#about" class="nav-link active">About</a></li>
+                <li><a href="#method" class="nav-link">How It Works</a></li>
+                <li><a href="#preview" class="nav-link">Book Preview</a></li>
+                <li><a href="#benefits" class="nav-link">Benefits</a></li>
+                <li><a href="#faq" class="nav-link">FAQ</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- ABOUT PRODUCT (HERO) -->
+    <section id="about">
+        <div class="about-image-wrapper">
+            <div class="main-mockup">
+                <div class="mockup-logo">VB</div>
+                <div class="mockup-content">
+                    <span class="mockup-tag">Active Recall System</span>
+                    <h2>VOCABUILD</h2>
+                    <p>English Vocabulary Builder</p>
+                </div>
+            </div>
+        </div>
+        <div class="about-content">
+            <span class="about-badge">Premium Learning Framework</span>
+            <h1>Master Vocabulary Through Active Recall.</h1>
+            <p>VOCABUILD is an engineered English vocabulary book pairing core linguistics structures with an integrated physical Red Mika Sheet. By hiding answer paths dynamically, it shifts students from passive reading into high-retention active recall processing.</p>
+            
+            <div class="product-meta-tags">
+                <div class="meta-tag"><i class="fa-solid fa-layer-group"></i> Red Mika Sheet Included</div>
+                <div class="meta-tag"><i class="fa-solid fa-graduation-cap"></i> University & Academic Ready</div>
+                <div class="meta-tag"><i class="fa-solid fa-brain"></i> Cognitive Self-Check System</div>
+            </div>
+
+            <div class="about-actions">
+                <a href="#method" class="btn btn-primary">Explore Book <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="#preview" class="btn btn-secondary">View Sample Pages</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- LEARNING METHOD -->
+    <section id="method">
+        <div class="section-header">
+            <h2>The Self-Check Learning Method</h2>
+            <p>Our structured cognitive processing cycle avoids passive skimming and ensures actual semantic memory encoding.</p>
+        </div>
+        <div class="method-grid">
+            <div class="method-card">
+                <div class="method-number">01</div>
+                <div class="method-icon-box"><i class="fa-solid fa-book-open"></i></div>
+                <h3>Read Vocabulary</h3>
+                <p>Isolate and absorb target contextual words along with structural lexical guidance items on the page left-hand spine.</p>
+            </div>
+            <div class="method-card">
+                <div class="method-number">02</div>
+                <div class="method-icon-box"><i class="fa-solid fa-eye-slash"></i></div>
+                <h3>Cover Answers</h3>
+                <p>Deploy the proprietary Red Mika Sheet overlay across the corresponding translation/definition data tracking vector columns.</p>
+            </div>
+            <div class="method-card">
+                <div class="method-number">03</div>
+                <div class="method-icon-box"><i class="fa-solid fa-brain"></i></div>
+                <h3>Recall & Answer</h3>
+                <p>Force the neural pathways to retrieve the semantic definitions entirely from active memory nodes rather than recognition prompts.</p>
+            </div>
+            <div class="method-card">
+                <div class="method-number">04</div>
+                <div class="method-icon-box"><i class="fa-solid fa-square-check"></i></div>
+                <h3>Reveal & Evaluate</h3>
+                <p>Slide the overlay layer systematically downwards to instantly reveal diagnostic performance tracking variables.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW TO USE THE RED MIKA SHEET -->
+    <section id="how-it-works" style="padding-top: 40px; padding-bottom: 40px;">
+        <div class="mika-showcase">
+            <div>
+                <div class="section-header" style="text-align: left; margin-bottom: 35px;">
+                    <h2>Red Mika Sheet Dynamic Interface</h2>
+                    <p>Interact with the simulation timeline tracker nodes below to preview the active filtering interface mechanics.</p>
+                </div>
+                
+                <div class="mika-interactive-container">
+                    <div class="step-progress-bar">
+                        <div class="progress-line" id="progress-line"></div>
+                        <div class="step-node active" onclick="goToMikaStep(1)">1</div>
+                        <div class="step-node" onclick="goToMikaStep(2)">2</div>
+                        <div class="step-node" onclick="goToMikaStep(3)">3</div>
+                        <div class="step-node" onclick="goToMikaStep(4)">4</div>
+                        <div class="step-node" onclick="goToMikaStep(5)">5</div>
+                    </div>
+
+                    <div class="step-card-display" id="mika-step-card">
+                        <h3><span id="step-tag">Step 1</span> <span style="background:none; padding:0; color:white;" id="step-title">Place Sheet</span></h3>
+                        <p id="step-desc">Position the Red Mika Sheet structural overlay securely flush over the primary data output columns.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mika-visualizer step-1" id="mika-visualizer">
+                <div class="visualizer-book-header">
+                    <span>Target Lexicon</span>
+                    <span>Semantic Target</span>
+                </div>
+                <div class="mika-sheet-overlay"></div>
+                <div class="visualizer-row">
+                    <span class="word-col">Acumen</span>
+                    <span class="definition-col">Kecerdikan</span>
+                </div>
+                <div class="visualizer-row">
+                    <span class="word-col">Cognitive</span>
+                    <span class="definition-col">Kognitif</span>
+                </div>
+                <div class="visualizer-row">
+                    <span class="word-col">Retention</span>
+                    <span class="definition-col">Ingatan</span>
+                </div>
+                <div class="visualizer-row">
+                    <span class="word-col">Framework</span>
+                    <span class="definition-col">Kerangka Kerja</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOOK PREVIEW (SLIDER) -->
+    <section id="preview">
+        <div class="section-header">
+            <h2>Inside VOCABUILD</h2>
+            <p>Every single layer structural layout layout archetype is precision-calibrated for maximum spatial retention workflows.</p>
+        </div>
+        
+        <div class="slider-wrapper">
+            <button class="slider-btn slider-btn-prev" id="prev-slide"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="slider-btn slider-btn-next" id="next-slide"><i class="fa-solid fa-chevron-right"></i></button>
+            
+            <div class="preview-slider" id="preview-slider">
+                <div class="slide">
+                    <div class="slide-content-mock">
+                        <i class="fa-solid fa-spell-check"></i>
+                        <h3>Vocabulary Architecture Layout</h3>
+                        <p>Optimized dual-column spatial orientation mapping targets. Words occupy standard visual grids directly parallel with color-masked analytical definition targets.</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="slide-content-mock">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <h3>Syntactic Exercise Engines</h3>
+                        <p>High-yield testing scenarios including targeted gap-filling, immediate contextual sentence assembly exercises, and structural output production units.</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="slide-content-mock">
+                        <i class="fa-solid fa-quote-left"></i>
+                        <h3>Sentence Practice Blueprints</h3>
+                        <p>Real-world practical usage samples isolating modern corporate, cross-functional academic, and technical professional environments logic frameworks.</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="slide-content-mock">
+                        <i class="fa-solid fa-stopwatch"></i>
+                        <h3>Sub-Unit Mini Quizzes</h3>
+                        <p>Time-blocked diagnostic sprint matrices allowing students to test long-term retention benchmarks under standardized cognitive retrieval constraints.</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="slide-content-mock">
+                        <i class="fa-solid fa-arrows-spin"></i>
+                        <h3>Cumulative Review Matrices</h3>
+                        <p>Iterative spaced-repetition layout schedules structured seamlessly back into standard page layouts to ensure historical memory paths stay active.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slider-dots" id="slider-dots"></div>
+        </div>
+    </section>
+
+    <!-- WHY THIS BOOK WORKS -->
+    <section id="benefits">
+        <div class="section-header">
+            <h2>Why This Framework Works</h2>
+            <p>Engineered directly around modern scientific evidence processing paradigms regarding memory retention mechanics.</p>
+        </div>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="benefit-info">
+                    <h3>Improves Retention Scales</h3>
+                    <p>Active tactile engagement targets neural path formation rates up to 3x standard text recognition reading processes.</p>
+                </div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-user-check"></i></div>
+                <div class="benefit-info">
+                    <h3>Encourages Independence</h3>
+                    <p>Enables self-contained personal flashcard ecosystems entirely inside a physical book layout frame variable.</p>
+                </div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-bolt"></i></div>
+                <div class="benefit-info">
+                    <h3>Pure Active Recall Learning</h3>
+                    <p>Forces direct context production mechanics instead of lazy eye tracking pattern habits.</p>
+                </div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+                <div class="benefit-info">
+                    <h3>Instant Self-Evaluation</h3>
+                    <p>Provides zero latency immediate error tracking feedback confirmation parameters directly down the page axis column.</p>
+                </div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-bullseye"></i></div>
+                <div class="benefit-info">
+                    <h3>Amplifies Visual Focus</h3>
+                    <p>Physically masks ambient background grid clutter to force target structural isolate optimization variables.</p>
+                </div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-gamepad"></i></div>
+                <div class="benefit-info">
+                    <h3>Tactile Gamification Loop</h3>
+                    <p>Transforms raw dictionary study into a clean, physical interactive looping engagement pattern.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCT SPECIFICATIONS -->
+    <section id="specs">
+        <div class="specs-container">
+            <div>
+                <div class="section-header" style="text-align: left; margin-bottom: 40px;">
+                    <h2>Technical Architecture Specifications</h2>
+                    <p>Premium tactile build quality intended for long-term everyday usage durability profiles.</p>
+                </div>
+                <div class="specs-grid">
+                    <div class="spec-card">
+                        <label>Dimensions</label>
+                        <p>Standard ISO A5 (148mm x 210mm)</p>
+                    </div>
+                    <div class="spec-card">
+                        <label>Volume Scale</label>
+                        <p>240 High-Density Density Pages</p>
+                    </div>
+                    <div class="spec-card">
+                        <label>Interior stock Paper</label>
+                        <p>100 GSM Premium Off-White Paper</p>
+                    </div>
+                    <div class="spec-card">
+                        <label>Mika Shield Matrix</label>
+                        <p>0.5mm Calibrated Scratch-Resistant PVC</p>
+                    </div>
+                    <div class="spec-card">
+                        <label>Target Age Group</label>
+                        <p>Ages 15 to University Post-Grad</p>
+                    </div>
+                    <div class="spec-card">
+                        <label>CEFR Proficiency</label>
+                        <p>Levels A2 Intermediate up to C1 Expert</p>
+                    </div>
+                </div>
+            </div>
+            <div class="qr-showcase-card">
+                <div class="qr-mockup">
+                    <i class="fa-solid fa-qrcode"></i>
+                </div>
+                <h3>Integrated Audio Support</h3>
+                <p>Every layout grid includes specialized crisp QR matrix entry configurations linking out directly to native high-fidelity audio phonetic voice-overs.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+        <div class="section-header">
+            <h2>Evaluated By Educators</h2>
+            <p>See how our pedagogical approach performs across real modern target classroom metrics.</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"The removal of answer tracking visibility transforms daily study routines entirely. Students show immediate increases in lexical conversion speeds during assessment timelines."</p>
+                <div class="profile-box">
+                    <div class="profile-img-mock">AM</div>
+                    <div class="profile-info">
+                        <h4>Agus Mahendra</h4>
+                        <span>Senior Applied Linguistics Instructor</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Using the Mika Sheet system makes self-testing incredibly fast. I don't waste hours creating flashcards anymore; it's all built smoothly straight into the book."</p>
+                <div class="profile-box">
+                    <div class="profile-img-mock">S</div>
+                    <div class="profile-info">
+                        <h4>Siti R.</h4>
+                        <span>Undergraduate English Major Student</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ (ACCORDION) -->
+    <section id="faq">
+        <div class="section-header">
+            <h2>Frequently Asked Questions</h2>
+            <p>Clear, direct architectural explanations detailing product deployment functions.</p>
+        </div>
+        <div class="faq-max-width">
+            <div class="faq-item">
+                <button class="faq-trigger">
+                    <span>What is the Red Mika Sheet?</span>
+                    <div class="faq-icon-state"><i class="fa-solid fa-chevron-down"></i></div>
+                </button>
+                <div class="faq-content">
+                    <p>It is a custom-calibrated optical red filter layer built from flexible, heavy-grade PVC. When aligned correctly over our specialized red-ink data columns, it absorbs specific visual wavelengths to make the text completely invisible to the human eye, facilitating active recall.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-trigger">
+                    <span>How does it work?</span>
+                    <div class="faq-icon-state"><i class="fa-solid fa-chevron-down"></i></div>
+                </button>
+                <div class="faq-content">
+                    <p>The layout prints answers using a specialized chromatic spectrum profile. When the transparent Red Mika sheet overlays this print block area, it filters out secondary light return, leaving a completely blank field until shifted away.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-trigger">
+                    <span>Can teachers use this in classrooms?</span>
+                    <div class="faq-icon-state"><i class="fa-solid fa-chevron-down"></i></div>
+                </button>
+                <div class="faq-content">
+                    <p>Absolutely. It serves as an exceptional tool for individual study periods, in-class diagnostic sprint assignments, or pair-based active peer review modules.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-trigger">
+                    <span>Is it suitable for beginners?</span>
+                    <div class="faq-icon-state"><i class="fa-solid fa-chevron-down"></i></div>
+                </button>
+                <div class="faq-content">
+                    <p>Yes. The book content pathing is multi-tier. It starts out from core foundational elements (A2) and smoothly ramps up toward complex structural terms (C1 profiles).</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-trigger">
+                    <span>Can the Red Mika Sheet be reused?</span>
+                    <div class="faq-icon-state"><i class="fa-solid fa-chevron-down"></i></div>
+                </button>
+                <div class="faq-content">
+                    <p>Yes. It is fully scratch-resistant, water-proof, and designed to last through thousands of cycles without degrading optical filtering capacity.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+        <div class="contact-container">
+            <div class="contact-info-panel">
+                <div>
+                    <h3>Let's Connect</h3>
+                    <p>Have inquiries regarding academic bulk integration requests or research validation evaluations? Drop a transmission message line here.</p>
+                </div>
+                <div class="social-links">
+                    <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+            <form class="contact-form" onsubmit="event.preventDefault(); alert('Project Prototype Simulation: Form successfully submitted data tracking metrics.');">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="E.g., Dr. Raden Anwar" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Institutional Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="username@university.ac.id" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message Payload</label>
+                    <textarea id="message" class="form-control" rows="5" placeholder="Outline your tracking query goals here..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="align-self: flex-start;">Send Inquiry Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 VOCABUILD Product Showcase. Engineered for Academic Final Examination Purposes. All Rights Reserved.</p>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT LOGIC MOTOR -->
+    <script>
+        /* --- STICKY NAV BACKGROUND ALTERATION --- */
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            updateActiveNavLink();
+        });
+
+        /* --- MOBILE MENU INTERACTION TOGGLE --- */
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-xmark');
+            });
+        });
+
+        /* --- ACTIVE SCROLL TRACKING HIGH-LIGHTER --- */
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        function updateActiveNavLink() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        /* --- MIKA SHEET INTERACTIVE SLIDER LOGIC --- */
+        const stepData = [
+            {
+                tag: "Step 1",
+                title: "Place Sheet",
+                desc: "Position the Red Mika Sheet structural overlay securely flush over the primary translation data columns."
+            },
+            {
+                tag: "Step 2",
+                title: "Read Target",
+                desc: "Isolate the target English phrase item. The cognitive focus frame optimizes sensory alignment pathways cleanly."
+            },
+            {
+                tag: "Step 3",
+                title: "Guess Meaning",
+                desc: "Attempt memory extraction parsing. Force synaptic recall generation processing loop chains dynamically."
+            },
+            {
+                tag: "Step 4",
+                title: "Slide Down",
+                desc: "Move the filter layer mask down instantly to display the correct answer metrics beneath."
+            },
+            {
+                tag: "Step 5",
+                title: "Review Loop",
+                desc: "Re-cover items with low scoring certainty. Build fast loop interval iterations to solidify storage."
+            }
+        ];
+
+        function goToMikaStep(stepNum) {
+            const nodes = document.querySelectorAll('.step-node');
+            nodes.forEach((node, idx) => {
+                if (idx < stepNum) node.classList.add('active');
+                else node.classList.remove('active');
+            });
+
+            const progressLine = document.getElementById('progress-line');
+            progressLine.style.width = `${((stepNum - 1) / 4) * 100}%`;
+
+            const data = stepData[stepNum - 1];
+            document.getElementById('step-tag').innerText = data.tag;
+            document.getElementById('step-title').innerText = data.title;
+            document.getElementById('step-desc').innerText = data.desc;
+
+            const viz = document.getElementById('mika-visualizer');
+            viz.className = `mika-visualizer step-${stepNum}`;
+        }
+
+        /* --- PREMIUM BOOK CAROUSEL SLIDER ENGINE --- */
+        const slider = document.getElementById('preview-slider');
+        const slides = document.querySelectorAll('.slide');
+        const dotsContainer = document.getElementById('slider-dots');
+        let currentSlideIdx = 0;
+
+        slides.forEach((_, idx) => {
+            const dot = document.createElement('div');
+            dot.className = `dot ${idx === 0 ? 'active' : ''}`;
+            dot.addEventListener('click', () => moveToSlide(idx));
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function updateSliderPosition() {
+            slider.style.transform = `translateX(-${currentSlideIdx * 100}%)`;
+            dots.forEach((dot, idx) => {
+                if (idx === currentSlideIdx) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+        }
+
+        function moveToSlide(idx) {
+            currentSlideIdx = idx;
+            updateSliderPosition();
+        }
+
+        document.getElementById('next-slide').addEventListener('click', () => {
+            currentSlideIdx = (currentSlideIdx + 1) % slides.length;
+            updateSliderPosition();
+        });
+
+        document.getElementById('prev-slide').addEventListener('click', () => {
+            currentSlideIdx = (currentSlideIdx - 1 + slides.length) % slides.length;
+            updateSliderPosition();
+        });
+
+        /* --- FAQ ACCORDION ARCHITECTURE CONTROLLER --- */
+        document.querySelectorAll('.faq-trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const item = trigger.parentElement;
+                const content = item.querySelector('.faq-content');
+                const isActive = item.classList.contains('active');
+                
+                document.querySelectorAll('.faq-item').forEach(el => {
+                    el.classList.remove('active');
+                    el.querySelector('.faq-content').style.maxHeight = null;
+                });
+
+                if (!isActive) {
+                    item.classList.add('active');
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
